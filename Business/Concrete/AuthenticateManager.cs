@@ -3,6 +3,8 @@ using System.Security.Claims;
 using System.Text;
 using Business.Abstract;
 using Core.Utils.Results;
+using DataAccess;
+using DataAccess.Domain;
 using Domain.IdentityModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -13,10 +15,10 @@ namespace Business.Concrete;
 public class AuthenticateManager : IAuthenticateService
 {
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly RoleManager<ApplicationRole> _roleManager;
     private readonly IConfiguration _configuration;
 
-    public AuthenticateManager(IConfiguration configuration, RoleManager<IdentityRole> roleManager,
+    public AuthenticateManager(IConfiguration configuration, RoleManager<ApplicationRole> roleManager,
         UserManager<ApplicationUser> userManager)
     {
         _configuration = configuration;

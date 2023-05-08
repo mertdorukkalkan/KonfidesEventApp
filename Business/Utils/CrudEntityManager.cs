@@ -47,7 +47,7 @@ namespace Business.Utils
 
             if (entity == null)
             {
-                return new ErrorDataResult<TEntityGetDto>($"'{id}' id'li {typeof(TEntity).Name} entitysi bulunamadý.");
+                return new ErrorDataResult<TEntityGetDto>($"'{id}' id'li {typeof(TEntity).Name} entitysi bulunamadï¿½.");
             }
 
             var updatedEntity = Mapper.Map(input, entity);
@@ -84,7 +84,7 @@ namespace Business.Utils
 
             if (entity == null)
             {
-                return new ErrorDataResult<TEntityGetDto>($"'{id}' id'li {typeof(TEntity).Name} entitysi bulunamadý.");
+                return new ErrorDataResult<TEntityGetDto>($"'{id}' id'li {typeof(TEntity).Name} entitysi bulunamadï¿½.");
             }
 
             var entityDto = Mapper.Map<TEntity, TEntityGetDto>(entity);

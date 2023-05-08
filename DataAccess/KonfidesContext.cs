@@ -1,11 +1,13 @@
+using DataAccess.Domain;
 using Domain;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace DataAccess;
 
-public class KonfidesContext : IdentityDbContext<ApplicationUser>
+public class KonfidesContext : IdentityDbContext<ApplicationUser,ApplicationRole ,int>
 {
     protected readonly IConfiguration Configuration;
     public KonfidesContext( DbContextOptions<KonfidesContext> options) : base(options)
@@ -15,11 +17,22 @@ public class KonfidesContext : IdentityDbContext<ApplicationUser>
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Blog>(x => { x.ToTable("blogs"); });
+        modelBuilder.Entity<Address>(x => { x.ToTable("addresses"); });
+        modelBuilder.Entity<Category>(x => { x.ToTable("categories"); });
+        modelBuilder.Entity<City>(x => { x.ToTable("city"); });
+        modelBuilder.Entity<Event>(x => { x.ToTable("events"); });
+        modelBuilder.Entity<Status>(x => { x.ToTable("Status"); });
+        modelBuilder.Entity<Ticket>(x => { x.ToTable("tickets"); });
        
         base.OnModelCreating(modelBuilder);
     }
-
-    public DbSet<Blog> Blogs { get; set; }
+    public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+    public DbSet<ApplicationRole> ApplicationRoles { get; set; }
+    public DbSet<Address> Addresses { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<City> Cities { get; set; }
+    public DbSet<Event> Events { get; set; }
+    public DbSet<Status> Status { get; set; }
+    public DbSet<Ticket> Tickets { get; set; }
     
 }
