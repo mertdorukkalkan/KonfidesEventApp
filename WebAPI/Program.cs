@@ -1,9 +1,11 @@
 using System.Text;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using Business;
-using Business.Abstract;
-using Business.Concrete;
+using Business.DependencyResolvers.Autofac;
 using DataAccess;
+using DataAccess.Domain;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +13,11 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
+    .ConfigureContainer<ContainerBuilder>(builder =>
+    {
+        builder.RegisterModule(new AutofacBusinessModule());
+    });
 ConfigurationManager configuration = builder.Configuration;
 // Add services to the container.
 
@@ -35,7 +42,7 @@ builder.Services.AddSwaggerGen(setup =>
             Type = ReferenceType.SecurityScheme
         }
     };
-
+   
     setup.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
 
     setup.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -44,15 +51,14 @@ builder.Services.AddSwaggerGen(setup =>
     });
 
 });
-builder.Services.AddScoped<IUnitOfWorks, UnitOfWork>();
-builder.Services.AddScoped<IAuthenticateService, AuthenticateManager>();
+
 builder.Services.AddDbContext<KonfidesContext>(opt =>
 {
     opt.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection"));
 });
 var mappingConfig = new MapperConfiguration(mc => { mc.AddProfile(new KonfidesAutoMapperProfile()); });
 var mapper = mappingConfig.CreateMapper();
-builder.Services.AddIdentity<ApplicationUser,IdentityRole>().AddEntityFrameworkStores<KonfidesContext>().AddDefaultTokenProviders();
+builder.Services.AddIdentity<ApplicationUser,ApplicationRole>().AddEntityFrameworkStores<KonfidesContext>().AddDefaultTokenProviders();
 builder.Services.AddSingleton(mapper);
 builder.Services.AddAuthentication(options =>
     {
