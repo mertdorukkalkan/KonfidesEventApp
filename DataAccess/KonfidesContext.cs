@@ -17,12 +17,12 @@ public class KonfidesContext : IdentityDbContext<ApplicationUser,ApplicationRole
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Address>(x => { x.ToTable("addresses"); });
-        modelBuilder.Entity<Category>(x => { x.ToTable("categories"); });
-        modelBuilder.Entity<City>(x => { x.ToTable("city"); });
-        modelBuilder.Entity<Event>(x => { x.ToTable("events"); });
+        modelBuilder.Entity<Address>(x => { x.ToTable("Addresses"); });
+        modelBuilder.Entity<Category>(x => { x.ToTable("Categories"); });
+        modelBuilder.Entity<City>(x => { x.ToTable("City"); });
+        modelBuilder.Entity<Event>(x => { x.ToTable("Events"); });
         modelBuilder.Entity<Status>(x => { x.ToTable("Status"); });
-        modelBuilder.Entity<Ticket>(x => { x.ToTable("tickets"); });
+        modelBuilder.Entity<Ticket>(x => { x.ToTable("Tickets"); });
        
         base.OnModelCreating(modelBuilder);
     }

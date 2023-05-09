@@ -6,6 +6,7 @@ using Core.Utils.Results;
 using DataAccess;
 using DataAccess.Domain;
 using Domain.IdentityModels;
+using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -17,17 +18,24 @@ public class AuthenticateManager : IAuthenticateService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<ApplicationRole> _roleManager;
     private readonly IConfiguration _configuration;
+    private IValidator<LoginModel> _validator;
 
     public AuthenticateManager(IConfiguration configuration, RoleManager<ApplicationRole> roleManager,
-        UserManager<ApplicationUser> userManager)
+        UserManager<ApplicationUser> userManager, IValidator<LoginModel> validator)
     {
         _configuration = configuration;
         _roleManager = roleManager;
         _userManager = userManager;
+        _validator = validator;
     }
 
     public async Task<IDataResult<Token>> Login(LoginModel model)
     {
+        var result = _validator.ValidateAsync(model);
+        if (result.Result.IsValid==false)
+        {
+           return new ErrorDataResult<Token>(result.Result.ToString());
+        }
         var user = await _userManager.FindByEmailAsync(model.Email);
         if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
         {

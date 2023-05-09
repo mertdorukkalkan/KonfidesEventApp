@@ -6,7 +6,7 @@ namespace DataAccess.Domain;
 
 public class Ticket : BaseEntity
 {
-    public string Code { get; set; }
+    public string TicketCode { get; set; }
     
     [ForeignKey("ApplicationUser")]
     public int UserId { get; set; }

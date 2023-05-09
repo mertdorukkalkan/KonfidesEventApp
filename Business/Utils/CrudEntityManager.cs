@@ -51,6 +51,7 @@ namespace Business.Utils
             }
 
             var updatedEntity = Mapper.Map(input, entity);
+            updatedEntity.UpdatedTime = DateTime.Now;
 
             try
             {
