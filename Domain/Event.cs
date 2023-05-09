@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Core.Domain;
-using DataAccess;
+
 
 namespace Domain;
 
