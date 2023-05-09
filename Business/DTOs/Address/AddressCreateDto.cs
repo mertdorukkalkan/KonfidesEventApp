@@ -1,4 +1,6 @@
-namespace Core.Business.DTOs.Address;
+using Core.Business.DTOs;
+
+namespace Business.DTOs.Address;
 
 public class AddressCreateDto : IDto
 {
