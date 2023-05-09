@@ -6,20 +6,16 @@ namespace DataAccess.Domain;
 
 public class Event : BaseEntity
 {
-    public string Name { get; set; }
+    public string EventName { get; set; }
     
     public DateTime DateTime { get; set; }
     public int Quota { get; set; }
-    public string Description { get; set; }
+    public string EventDescription { get; set; }
     
     [ForeignKey("Address")]
     public int? AddressId { get; set; }
     public Address Address { get; set; }
-    
-    [ForeignKey("City")]
-    public int? CityId { get; set; }
-    public City City { get; set; }
-    
+
     [ForeignKey("Category")]
     public int? CategoryId { get; set; }
     public Category Category { get; set; }
