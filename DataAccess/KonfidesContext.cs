@@ -1,4 +1,4 @@
-using DataAccess.Domain;
+using Core.Domain;
 using Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

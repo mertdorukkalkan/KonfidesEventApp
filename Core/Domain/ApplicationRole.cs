@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace DataAccess.Domain;
+namespace Core.Domain;
 
 public class ApplicationRole : IdentityRole<int>
 {

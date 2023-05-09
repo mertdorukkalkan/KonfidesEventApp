@@ -1,8 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Core.Domain;
-using Domain;
 
-namespace DataAccess.Domain;
+namespace Domain;
 
 public class Ticket : BaseEntity
 {

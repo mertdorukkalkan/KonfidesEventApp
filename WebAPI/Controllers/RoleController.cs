@@ -1,5 +1,4 @@
 using Business.Abstract;
-using DataAccess.Domain;
 using Domain.IdentityModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

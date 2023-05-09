@@ -7,7 +7,6 @@ using Core.Business.DTOs.Event;
 using Core.DataAccess;
 using Core.Utils.Results;
 using DataAccess;
-using DataAccess.Domain;
 using Domain;
 using IResult = Core.Utils.Results.IResult;
 

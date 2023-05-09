@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Core.Domain;
-using Domain;
+using DataAccess;
 
-namespace DataAccess.Domain;
+namespace Domain;
 
 public class Event : BaseEntity
 {

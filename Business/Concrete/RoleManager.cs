@@ -1,6 +1,6 @@
 using Business.Abstract;
+using Core.Domain;
 using Core.Utils.Results;
-using DataAccess.Domain;
 using Microsoft.AspNetCore.Identity;
 
 namespace Business.Concrete;

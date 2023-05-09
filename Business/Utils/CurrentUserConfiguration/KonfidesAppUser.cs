@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Core.Domain;
 using DataAccess;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

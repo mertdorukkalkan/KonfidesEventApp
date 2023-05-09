@@ -7,7 +7,7 @@ using Core.Business.DTOs.Ticket;
 using Core.DataAccess;
 using Core.Utils.Results;
 using DataAccess;
-using DataAccess.Domain;
+using Domain;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using IResult = Microsoft.AspNetCore.Http.IResult;

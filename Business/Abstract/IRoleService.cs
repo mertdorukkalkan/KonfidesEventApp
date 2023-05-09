@@ -1,5 +1,4 @@
 using Core.Utils.Results;
-using DataAccess.Domain;
 
 namespace Business.Abstract;
 

@@ -6,7 +6,6 @@ using Core.Business.DTOs.Category;
 using Core.Business.DTOs.Event;
 using Core.Business.DTOs.Status;
 using Core.Business.DTOs.Ticket;
-using DataAccess.Domain;
 using Domain;
 
 
