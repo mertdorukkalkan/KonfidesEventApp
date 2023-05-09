@@ -5,7 +5,6 @@ using Business.Validation;
 using DataAccess;
 using Domain.IdentityModels;
 using FluentValidation;
-using Microsoft.AspNetCore.Identity;
 
 namespace Business.DependencyResolvers.Autofac;
 

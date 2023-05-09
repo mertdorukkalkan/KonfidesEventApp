@@ -2,40 +2,37 @@ using System.Security.Claims;
 using AutoMapper;
 using Business.Abstract;
 using Business.Utils;
+using Business.Utils.CurrentUserConfiguration;
 using Core.Business.DTOs.Event;
 using Core.DataAccess;
 using Core.Utils.Results;
 using DataAccess;
 using DataAccess.Domain;
 using Domain;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+using IResult = Core.Utils.Results.IResult;
 
 namespace Business.Concrete;
 
 public class EventManager : CrudEntityManager<Event,EventGetDto,EventCreateDto,EventUpdateDto>, IEventService
 {
     private IEntityRepository<Address> _addressRepository;
-    private UserManager<ApplicationUser> _userManager;
-    private readonly IHttpContextAccessor _accessor;
-    public EventManager(IUnitOfWorks unitOfWork, IMapper mapper, UserManager<ApplicationUser> userManager, IHttpContextAccessor accessor) : base(unitOfWork, mapper)
+    private KonfidesAppUser _konfidesAppUser;
+    public EventManager(IUnitOfWorks unitOfWork, IMapper mapper, KonfidesAppUser konfidesAppUser) : base(unitOfWork, mapper)
     {
-        _userManager = userManager;
-        _accessor = accessor;
+        _konfidesAppUser = konfidesAppUser;
         _addressRepository = UnitOfWork.GenerateRepository<Address>();
     }
 
     public override async Task<IDataResult<EventGetDto>> AddAsync(EventCreateDto input)
     {
-        var eEvent = Mapper.Map<EventCreateDto, Event>(input);
         var address = Mapper.Map<EventCreateDto, Address>(input);
+        var eEvent = Mapper.Map<EventCreateDto, Event>(input);
+        
         
         await UnitOfWork.BeginTransactionAsync();
         try
         {
-            var claims = GetUser();
-            var user = await _userManager.FindByNameAsync(claims.Identity.Name);
-            eEvent.ApplicationUser = user;
+            eEvent.ApplicationUser = _konfidesAppUser.User;
             await _addressRepository.AddAsync(address);
             eEvent.AddressId = address.Id;
             eEvent.StatusId = 1;
@@ -54,27 +51,25 @@ public class EventManager : CrudEntityManager<Event,EventGetDto,EventCreateDto,E
     public override async Task<IDataResult<EventGetDto>> UpdateAsync(int id, EventUpdateDto input)
     {
         
-        var entity = await BaseEntityRepository.GetAsync(x => x.Id == id);
-        var address = await _addressRepository.GetAsync(x => x.Id == input.AddressId);
+        var entity = await BaseEntityRepository.GetWithIncludeAsync(x => x.Id == id,y=>y.Address);
 
         if (entity == null)
         {
             return new ErrorDataResult<EventGetDto>($"'{id}' id'li {typeof(Event).Name} entitysi bulunamad�.");
         }
-        if (address == null)
+
+        if (entity.DateTime.Subtract(DateTime.Now).TotalDays < 5)
         {
-            return new ErrorDataResult<EventGetDto>($"'{id}' id'li {typeof(Address).Name} entitysi bulunamad�.");
+            return new ErrorDataResult<EventGetDto>("5 günden az süre kaldığı için etkinlik güncellenemez ");
         }
-
         var updatedEntity = Mapper.Map(input, entity);
+        entity.Address = Mapper.Map(input, entity.Address);
         updatedEntity.UpdatedTime = DateTime.Now;
-        var updatedAddress = Mapper.Map(input, address);
-        updatedAddress.UpdatedTime = DateTime.Now;
-
+        
         try
         {
             await BaseEntityRepository.UpdateAsync(updatedEntity);
-            await _addressRepository.UpdateAsync(updatedAddress);
+            await _addressRepository.UpdateAsync(entity.Address);
         }
         catch (Exception ex)
         {
@@ -82,9 +77,6 @@ public class EventManager : CrudEntityManager<Event,EventGetDto,EventCreateDto,E
         }
 
         return await GetByIdAsync(id);
-    }
-    public ClaimsPrincipal GetUser() {
-        return _accessor?.HttpContext?.User;
     }
     public override async Task<IDataResult<ICollection<EventGetDto>>> GetAllAsync()
     {
@@ -103,5 +95,31 @@ public class EventManager : CrudEntityManager<Event,EventGetDto,EventCreateDto,E
             
         var eventGetDto = Mapper.Map<Event, EventGetDto>(eEvent);
         return new SuccessDataResult<EventGetDto>(eventGetDto);
+    }
+    
+    public async Task<IDataResult<ICollection<EventGetDto>>> GetUserEvents()
+    {
+        var events = await BaseEntityRepository.GetListAsync(x => x.UserId == _konfidesAppUser.User.Id);
+        var eventGetDtos = Mapper.Map<List<Event>, List<EventGetDto>>(events.ToList());
+        return new SuccessDataResult<ICollection<EventGetDto>>(eventGetDtos);
+        
+    }
+    public override async Task<IResult> DeleteByIdAsync(int id)
+    {
+        var entity = await BaseEntityRepository.GetAsync(c => c.Id == id);
+        if (entity.DateTime.Subtract(DateTime.Now).TotalDays < 5)
+        {
+            return new ErrorDataResult<EventGetDto>("5 günden az süre kaldığı için etkinlik silinemez ");
+        }
+        try
+        {
+            await BaseEntityRepository.DeleteAsync(entity);
+        }
+        catch (Exception ex)
+        {
+            return new ErrorResult(ex.Message);
+        }
+
+        return new SuccessResult($"'{id}' id'li {typeof(Event).Name} entitysi silindi.");
     }
 }

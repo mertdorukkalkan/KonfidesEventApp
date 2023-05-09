@@ -6,5 +6,7 @@ namespace Business.Abstract;
 
 public interface ITicketService : ICrudEntityService<TicketGetDto,TicketCreateDto,TicketCreateDto>
 {
-    public IDataResult<string> TicketCheck(string code);
+    public Task<IDataResult<TicketGetDto>>  TicketCheck(string code);
+
+    public Task<IDataResult<ICollection<TicketGetDto>>> GetUserTickets();
 }

@@ -18,6 +18,10 @@ public class RoleManager : IRoleService
     {
         IdentityResult result = null;
         result = await _roleManager.CreateAsync(new ApplicationRole(){Name = roleName,Description = description});
+        if (await _roleManager.RoleExistsAsync(roleName))
+        {
+            return new ErrorResult("Role already exists");
+        }
         if (result.Succeeded)
         {
             return new SuccessResult("Rol Yaratıldı");
@@ -38,4 +42,5 @@ public class RoleManager : IRoleService
 
         return new ErrorResult();
     }
+    
 }

@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI", "WebAPI\WebAPI.csproj", "{51D4351E-FF6A-4F7B-8B1F-82A5FE08BE48}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KonfidesClient", "KonfidesClient\KonfidesClient.csproj", "{52DD3A1C-CCD6-413E-AA7F-9C6F3F0CFED4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{51D4351E-FF6A-4F7B-8B1F-82A5FE08BE48}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51D4351E-FF6A-4F7B-8B1F-82A5FE08BE48}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51D4351E-FF6A-4F7B-8B1F-82A5FE08BE48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52DD3A1C-CCD6-413E-AA7F-9C6F3F0CFED4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52DD3A1C-CCD6-413E-AA7F-9C6F3F0CFED4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52DD3A1C-CCD6-413E-AA7F-9C6F3F0CFED4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52DD3A1C-CCD6-413E-AA7F-9C6F3F0CFED4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

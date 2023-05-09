@@ -1,9 +1,11 @@
 using Business.Abstract;
 using DataAccess.Domain;
+using Domain.IdentityModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
-
+[Authorize(Roles = UserRoles.Admin)]
 public class RoleController : ControllerBase
 {
     private IRoleService _roleService;

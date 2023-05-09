@@ -113,6 +113,28 @@ public class AuthenticateManager : IAuthenticateService
             return new SuccessResult("User Created");
         }
 
+        public async Task<IResult> AddRoleToUser(string email,string role)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            
+                await _userManager.AddToRoleAsync(user, role);
+                return new SuccessResult("Rol Eklendi");
+
+        }
+        public async Task<IResult> ChangePassword(string email, string password)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            string token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            await _userManager.ResetPasswordAsync(user, token, password);
+            return new SuccessResult("Şifre değişimi başarılı");
+        }
+
+        public IDataResult<IQueryable<ApplicationUser>> GetUsers()
+        {
+            var users = _userManager.Users;
+            return new SuccessDataResult<IQueryable<ApplicationUser>>(users);
+        }
+
         private JwtSecurityToken GetToken(List<Claim> authClaims)
         {
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
@@ -127,5 +149,5 @@ public class AuthenticateManager : IAuthenticateService
 
             return token;
         }
-
+        
     }

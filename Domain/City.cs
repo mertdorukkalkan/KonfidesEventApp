@@ -1,4 +1,6 @@
+using System.ComponentModel.DataAnnotations;
 using Core.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace Domain;
 

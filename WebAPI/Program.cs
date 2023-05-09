@@ -4,6 +4,7 @@ using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using Business;
 using Business.DependencyResolvers.Autofac;
+using Business.Utils.CurrentUserConfiguration;
 using DataAccess;
 using DataAccess.Domain;
 using FluentValidation.AspNetCore;
@@ -14,8 +15,17 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<KonfidesContext>(opt =>
+{
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection"));
+});
+var mappingConfig = new MapperConfiguration(mc => { mc.AddProfile(new KonfidesAutoMapperProfile()); });
+var mapper = mappingConfig.CreateMapper();
+builder.Services.AddIdentity<ApplicationUser,ApplicationRole>().AddEntityFrameworkStores<KonfidesContext>().AddDefaultTokenProviders();
+builder.Services.AddSingleton(mapper);
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddTransient(typeof(KonfidesAppUser));
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
     .ConfigureContainer<ContainerBuilder>(builder =>
     {
@@ -55,14 +65,7 @@ builder.Services.AddSwaggerGen(setup =>
 
 });
 
-builder.Services.AddDbContext<KonfidesContext>(opt =>
-{
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection"));
-});
-var mappingConfig = new MapperConfiguration(mc => { mc.AddProfile(new KonfidesAutoMapperProfile()); });
-var mapper = mappingConfig.CreateMapper();
-builder.Services.AddIdentity<ApplicationUser,ApplicationRole>().AddEntityFrameworkStores<KonfidesContext>().AddDefaultTokenProviders();
-builder.Services.AddSingleton(mapper);
+
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

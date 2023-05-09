@@ -18,8 +18,10 @@ public class KonfidesContext : IdentityDbContext<ApplicationUser,ApplicationRole
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Address>(x => { x.ToTable("Addresses"); });
-        modelBuilder.Entity<Category>(x => { x.ToTable("Categories"); });
-        modelBuilder.Entity<City>(x => { x.ToTable("City"); });
+        modelBuilder.Entity<Category>(x => { x.ToTable("Categories")
+            .HasIndex(e=>e.CategoryName).IsUnique(); });
+        modelBuilder.Entity<City>(x => { x.ToTable("City")
+            .HasIndex(e=>e.CityName).IsUnique(); });
         modelBuilder.Entity<Event>(x => { x.ToTable("Events"); });
         modelBuilder.Entity<Status>(x => { x.ToTable("Status"); });
         modelBuilder.Entity<Ticket>(x => { x.ToTable("Tickets"); });
